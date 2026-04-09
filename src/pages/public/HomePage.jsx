@@ -15,7 +15,6 @@ import Alert from "../../components/Alert";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import ProgramCard from "../../components/ProgramCard";
 import SectionHeader from "../../components/SectionHeader";
-import CertificateCreator from "../../components/CertificateCreator";
 import { getSiteCopy } from "../../data/siteCopy";
 
 const audienceCards = [
@@ -218,8 +217,6 @@ const HomePage = () => {
           }
         />
       </section>
-
-      <CertificateCreator />
 
       <section className="mx-auto max-w-7xl px-4 py-10">
         <SectionHeader
