@@ -9,7 +9,6 @@ import AwardsPage from "./pages/public/AwardsPage";
 import PublicProgramsPage from "./pages/public/PublicProgramsPage";
 import FaqPage from "./pages/public/FaqPage";
 import ContactPage from "./pages/public/ContactPage";
-import ResourcesBlogsPage from "./pages/public/ResourcesBlogsPage";
 import PoliciesPage from "./pages/public/PoliciesPage";
 import LoginPage from "./pages/public/LoginPage";
 import RegisterPage from "./pages/public/RegisterPage";
@@ -27,7 +26,8 @@ import ProfilePage from "./pages/portal/ProfilePage";
 import SettingsPage from "./pages/portal/SettingsPage";
 import AdminPage from "./pages/portal/AdminPage";
 import NotFoundPage from "./pages/portal/NotFoundPage";
-
+import ResourcesBlogsPage from "./pages/public/ResourcesBlogsPage";
+import PublicResourceDetailPage from "./pages/public/PublicResourceDetailPage";
 const App = () => (
   <>
     <ScrollToTop />
@@ -61,6 +61,7 @@ const App = () => (
         <Route path="programs" element={<ProgramsPage />} />
         <Route path="programs/:id" element={<ProgramDetailPage />} />
         <Route path="resources" element={<ResourcesPage />} />
+        <Route path="resources/:id" element={<PublicResourceDetailPage />} />
         <Route path="resources/:id" element={<ResourceDetailPage />} />
         <Route path="bookings" element={<BookingsPage />} />
         <Route path="messages" element={<MessagesPage />} />
