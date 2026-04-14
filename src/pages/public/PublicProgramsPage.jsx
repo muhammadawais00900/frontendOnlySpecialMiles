@@ -1,61 +1,38 @@
-
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
-import client from '../../api/client';
 import { useMeta } from '../../hooks/useMeta';
-import { usePreferences } from '../../context/PreferencesContext';
-import Alert from '../../components/Alert';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import ProgramCard from '../../components/ProgramCard';
 import SectionHeader from '../../components/SectionHeader';
+import { publicPrograms } from '../../data/publicContent';
 
 const categories = ['All', 'Parenting', 'Education', 'Student Success', 'Workplace', 'Consultancy'];
 
 const PublicProgramsPage = () => {
-  const { t, preferences } = usePreferences();
-  const [programs, setPrograms] = useState([]);
   const [filters, setFilters] = useState({ category: 'All', search: '' });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useMeta({
-    title: t('programs.title'),
-    description: 'Browse Special Miles programs for families, educators, students, workplaces and organisational partners.'
+    title: 'Programs',
+    description:
+      'Browse Special Miles programs across parenting, education, student success, workplace inclusion, and consultancy.',
   });
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        setLoading(true);
-        setError('');
-        const { data } = await client.get('/programs', {
-          params: {
-            category: filters.category,
-            search: filters.search
-          }
-        });
-        setPrograms(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+  const programs = useMemo(() => {
+    return publicPrograms.filter((program) => {
+      const matchesCategory = filters.category === 'All' || program.category === filters.category;
+      const haystack = [program.title, program.summary, program.description, ...(program.outcomes || [])]
+        .join(' ')
+        .toLowerCase();
+      const matchesSearch = haystack.includes(filters.search.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
   }, [filters]);
-
-  const categoryButtons = useMemo(
-    () =>
-      categories.map((category) => ({
-        value: category,
-        label: category === 'All' ? t('common.all') : t(`categories.${category}`)
-      })),
-    [preferences.language]
-  );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-14">
-      <SectionHeader title={t('programs.title')} description={t('programs.subtitle')} />
+      <SectionHeader
+        title="Programs"
+        description="Evidence-based programs that strengthen inclusion, wellbeing, learning, and capability across home, education, and workplace settings."
+      />
       <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-soft">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
           <label className="relative block">
@@ -68,32 +45,27 @@ const PublicProgramsPage = () => {
             />
           </label>
           <div className="flex flex-wrap gap-2">
-            {categoryButtons.map((category) => (
+            {categories.map((category) => (
               <button
-                key={category.value}
+                key={category}
                 type="button"
-                onClick={() => setFilters((current) => ({ ...current, category: category.value }))}
+                onClick={() => setFilters((current) => ({ ...current, category }))}
                 className={`rounded-2xl px-4 py-3 text-sm font-medium ${
-                  filters.category === category.value ? 'bg-brand-navy text-white' : 'border border-slate-200 bg-white text-slate-600'
+                  filters.category === category ? 'bg-brand-navy text-white' : 'border border-slate-200 bg-white text-slate-600'
                 }`}
               >
-                {category.label}
+                {category}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {error ? <div className="mt-6"><Alert variant="error">{error}</Alert></div> : null}
-      {loading ? (
-        <div className="mt-8"><LoadingSpinner /></div>
-      ) : (
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {programs.map((program) => (
-            <ProgramCard key={program._id} program={program} />
-          ))}
-        </div>
-      )}
+      <div className="mt-8 grid gap-6 lg:grid-cols-3">
+        {programs.map((program) => (
+          <ProgramCard key={program.slug} program={program} />
+        ))}
+      </div>
     </div>
   );
 };
