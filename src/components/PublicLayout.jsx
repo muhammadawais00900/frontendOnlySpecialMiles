@@ -1,11 +1,19 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
-import { Facebook, Instagram, Linkedin, Menu, X, Youtube } from "lucide-react";
-import { useState } from "react";
-import Logo from "./Logo";
-import LanguageSelector from "./LanguageSelector";
-import { usePreferences } from "../context/PreferencesContext";
-import { useAuth } from "../context/AuthContext";
-import { useSiteContent } from "../hooks/useSiteContent";
+import { Link, NavLink, Outlet } from 'react-router-dom';
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Menu,
+  Twitter,
+  X,
+} from 'lucide-react';
+import { useState } from 'react';
+import Logo from './Logo';
+import LanguageSelector from './LanguageSelector';
+import { usePreferences } from '../context/PreferencesContext';
+import { useAuth } from '../context/AuthContext';
+import { useSiteContent } from '../hooks/useSiteContent';
+import { publicSiteContent } from '../data/publicContent';
 
 const PublicLayout = () => {
   const { t } = usePreferences();
@@ -13,32 +21,34 @@ const PublicLayout = () => {
   const { siteContent } = useSiteContent();
   const [open, setOpen] = useState(false);
 
+  const mergedSiteContent = {
+    ...publicSiteContent,
+    ...(siteContent || {}),
+    socialLinks: {
+      ...publicSiteContent.socialLinks,
+      ...(siteContent?.socialLinks || {}),
+    },
+  };
+
   const navItems = [
-    ["/", t("nav.home")],
-    ["/about", t("nav.about")],
-    ["/programs", t("nav.programs")],
-    ["/resources", t("nav.resourcesBlogs") || "Resources + Blogs"],
-    ["/awards", t("nav.awards")],
-    ["/faq", t("nav.faq")],
-    ["/contact", t("nav.contact")],
+    ['/', t('nav.home')],
+    ['/about', t('nav.about')],
+    ['/programs', t('nav.programs')],
+    ['/resources', t('nav.resourcesBlogs') || 'Resources & Blogs'],
+    ['/awards', t('nav.awards')],
+    ['/faq', t('nav.faq')],
+    ['/contact', t('nav.contact')],
   ];
 
   const socials = [
-    ["facebook", Facebook],
-    ["instagram", Instagram],
-    ["linkedin", Linkedin],
-    ["youtube", Youtube],
+    ['facebook', Facebook],
+    ['instagram', Instagram],
+    ['linkedin', Linkedin],
+    ['x', Twitter],
   ];
 
   return (
     <div className="min-h-screen bg-page">
-      {siteContent?.announcement ? (
-        <div className="bg-brand-700 px-4 py-3 text-center text-sm text-white">
-          <span className="font-semibold">{t("home.announcementLabel")}:</span>{" "}
-          {siteContent.announcement}
-        </div>
-      ) : null}
-
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4">
           <Link to="/" className="shrink-0">
@@ -51,7 +61,7 @@ const PublicLayout = () => {
                 key={to}
                 to={to}
                 className={({ isActive }) =>
-                  `text-sm font-medium transition ${isActive ? "text-brand-700" : "text-slate-600 hover:text-brand-700"}`
+                  `text-sm font-medium transition ${isActive ? 'text-brand-700' : 'text-slate-600 hover:text-brand-700'}`
                 }
               >
                 {label}
@@ -66,7 +76,7 @@ const PublicLayout = () => {
                 to="/portal/dashboard"
                 className="rounded-2xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700"
               >
-                {t("nav.dashboard")}
+                {t('nav.dashboard')}
               </Link>
             ) : (
               <>
@@ -74,13 +84,13 @@ const PublicLayout = () => {
                   to="/login"
                   className="rounded-2xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-brand-200 hover:text-brand-700"
                 >
-                  {t("nav.login")}
+                  {t('nav.login')}
                 </Link>
                 <Link
                   to="/register"
                   className="rounded-2xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700"
                 >
-                  {t("nav.register")}
+                  {t('nav.register')}
                 </Link>
               </>
             )}
@@ -104,7 +114,7 @@ const PublicLayout = () => {
                   to={to}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
-                    `block rounded-2xl px-4 py-3 text-sm font-medium ${isActive ? "bg-brand-600 text-white" : "text-slate-700 hover:bg-brand-50"}`
+                    `block rounded-2xl px-4 py-3 text-sm font-medium ${isActive ? 'bg-brand-600 text-white' : 'text-slate-700 hover:bg-brand-50'}`
                   }
                 >
                   {label}
@@ -120,7 +130,7 @@ const PublicLayout = () => {
                   onClick={() => setOpen(false)}
                   className="rounded-2xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white"
                 >
-                  {t("nav.dashboard")}
+                  {t('nav.dashboard')}
                 </Link>
               ) : (
                 <>
@@ -129,14 +139,14 @@ const PublicLayout = () => {
                     onClick={() => setOpen(false)}
                     className="rounded-2xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white"
                   >
-                    {t("nav.login")}
+                    {t('nav.login')}
                   </Link>
                   <Link
                     to="/register"
                     onClick={() => setOpen(false)}
                     className="rounded-2xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700"
                   >
-                    {t("nav.register")}
+                    {t('nav.register')}
                   </Link>
                 </>
               )}
@@ -154,17 +164,18 @@ const PublicLayout = () => {
           <div>
             <Logo />
             <p className="mt-4 max-w-md text-sm leading-6 text-slate-600">
-              {t("footer.tagline")}
+              {mergedSiteContent.footerDescription}
             </p>
             <div className="mt-5 flex gap-3">
               {socials.map(([key, Icon]) =>
-                siteContent?.socialLinks?.[key] ? (
+                mergedSiteContent.socialLinks?.[key] ? (
                   <a
                     key={key}
-                    href={siteContent.socialLinks[key]}
+                    href={mergedSiteContent.socialLinks[key]}
                     target="_blank"
                     rel="noreferrer"
                     className="rounded-2xl border border-slate-200 p-3 text-slate-600 transition hover:border-brand-200 hover:text-brand-700"
+                    aria-label={key}
                   >
                     <Icon className="h-4 w-4" />
                   </a>
@@ -175,36 +186,36 @@ const PublicLayout = () => {
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-700">
-              {t("common.all")}
+              Quick links
             </h3>
             <div className="mt-4 space-y-3 text-sm text-slate-600">
               <Link to="/privacy" className="block hover:text-brand-navy">
-                {t("nav.privacy")}
+                {t('nav.privacy')}
               </Link>
               <Link to="/terms" className="block hover:text-brand-navy">
-                {t("nav.terms")}
+                {t('nav.terms')}
               </Link>
               <Link to="/refund" className="block hover:text-brand-navy">
-                {t("nav.refund")}
+                {t('nav.refund')}
               </Link>
             </div>
           </div>
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-700">
-              {t("nav.contact")}
+              Contact
             </h3>
             <div className="mt-4 space-y-3 text-sm text-slate-600">
-              <p>{siteContent?.supportEmail || "hello@specialmiles.org"}</p>
-              <p>{siteContent?.supportPhone || "+61 000 000 000"}</p>
-              {(siteContent?.locations || []).map((location) => (
+              <p>{mergedSiteContent.supportEmail}</p>
+              <p>{mergedSiteContent.supportPhone}</p>
+              {mergedSiteContent.locations.map((location) => (
                 <p key={location}>{location}</p>
               ))}
             </div>
           </div>
         </div>
         <div className="border-t border-slate-200 px-4 py-4 text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} Special Miles. {t("footer.rights")}
+          © {new Date().getFullYear()} Special Miles. {t('footer.rights')}
         </div>
       </footer>
     </div>
