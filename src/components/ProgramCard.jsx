@@ -4,8 +4,8 @@ import { formatCurrency, getCategoryLabel, getLocalizedField } from '../utils/he
 import { usePreferences } from '../context/PreferencesContext';
 
 const ProgramCard = ({ program, portal = false }) => {
-  const { preferences, t } = usePreferences();
-  const destination = portal ? `/portal/programs/${program._id}` : '/register';
+  const { preferences } = usePreferences();
+  const destination = portal ? `/portal/programs/${program._id}` : `/programs/${program.slug || program._id}`;
   const title = getLocalizedField(program, 'title', preferences.language);
   const summary = getLocalizedField(program, 'summary', preferences.language) || getLocalizedField(program, 'description', preferences.language);
 
@@ -28,7 +28,7 @@ const ProgramCard = ({ program, portal = false }) => {
       <div className="mt-6 flex items-center justify-between gap-3">
         <span className="text-lg font-bold text-brand-navy">{formatCurrency(program.price || 0)}</span>
         <Link to={destination} className="rounded-2xl bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">
-          {portal ? 'Open' : t('programs.enroll')}
+          {portal ? 'Open' : 'View details'}
         </Link>
       </div>
     </article>
