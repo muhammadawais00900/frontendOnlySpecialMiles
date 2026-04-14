@@ -1,33 +1,35 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import ScrollToTop from "./components/ScrollToTop";
-import PublicLayout from "./components/PublicLayout";
-import AppShell from "./components/AppShell";
-import ProtectedRoute from "./components/ProtectedRoute";
-import HomePage from "./pages/public/HomePage";
-import AboutPage from "./pages/public/AboutPage";
-import AwardsPage from "./pages/public/AwardsPage";
-import PublicProgramsPage from "./pages/public/PublicProgramsPage";
-import FaqPage from "./pages/public/FaqPage";
-import ContactPage from "./pages/public/ContactPage";
-import PoliciesPage from "./pages/public/PoliciesPage";
-import LoginPage from "./pages/public/LoginPage";
-import RegisterPage from "./pages/public/RegisterPage";
-import ResetPasswordPage from "./pages/public/ResetPasswordPage";
-import DashboardPage from "./pages/portal/DashboardPage";
-import ProgramsPage from "./pages/portal/ProgramsPage";
-import ProgramDetailPage from "./pages/portal/ProgramDetailPage";
-import ResourcesPage from "./pages/portal/ResourcesPage";
-import ResourceDetailPage from "./pages/portal/ResourceDetailPage";
-import BookingsPage from "./pages/portal/BookingsPage";
-import MessagesPage from "./pages/portal/MessagesPage";
-import NotificationsPage from "./pages/portal/NotificationsPage";
-import SupportPage from "./pages/portal/SupportPage";
-import ProfilePage from "./pages/portal/ProfilePage";
-import SettingsPage from "./pages/portal/SettingsPage";
-import AdminPage from "./pages/portal/AdminPage";
-import NotFoundPage from "./pages/portal/NotFoundPage";
-import ResourcesBlogsPage from "./pages/public/ResourcesBlogsPage";
-import PublicResourceDetailPage from "./pages/public/PublicResourceDetailPage";
+import { Navigate, Route, Routes } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
+import PublicLayout from './components/PublicLayout';
+import AppShell from './components/AppShell';
+import ProtectedRoute from './components/ProtectedRoute';
+import HomePage from './pages/public/HomePage';
+import AboutPage from './pages/public/AboutPage';
+import AwardsPage from './pages/public/AwardsPage';
+import PublicProgramsPage from './pages/public/PublicProgramsPage';
+import PublicProgramDetailPage from './pages/public/PublicProgramDetailPage';
+import FaqPage from './pages/public/FaqPage';
+import ContactPage from './pages/public/ContactPage';
+import PoliciesPage from './pages/public/PoliciesPage';
+import LoginPage from './pages/public/LoginPage';
+import RegisterPage from './pages/public/RegisterPage';
+import ResetPasswordPage from './pages/public/ResetPasswordPage';
+import DashboardPage from './pages/portal/DashboardPage';
+import ProgramsPage from './pages/portal/ProgramsPage';
+import ProgramDetailPage from './pages/portal/ProgramDetailPage';
+import ResourcesPage from './pages/portal/ResourcesPage';
+import ResourceDetailPage from './pages/portal/ResourceDetailPage';
+import BookingsPage from './pages/portal/BookingsPage';
+import MessagesPage from './pages/portal/MessagesPage';
+import NotificationsPage from './pages/portal/NotificationsPage';
+import SupportPage from './pages/portal/SupportPage';
+import ProfilePage from './pages/portal/ProfilePage';
+import SettingsPage from './pages/portal/SettingsPage';
+import AdminPage from './pages/portal/AdminPage';
+import NotFoundPage from './pages/portal/NotFoundPage';
+import ResourcesBlogsPage from './pages/public/ResourcesBlogsPage';
+import PublicResourceDetailPage from './pages/public/PublicResourceDetailPage';
+
 const App = () => (
   <>
     <ScrollToTop />
@@ -36,7 +38,9 @@ const App = () => (
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/programs" element={<PublicProgramsPage />} />
+        <Route path="/programs/:id" element={<PublicProgramDetailPage />} />
         <Route path="/resources" element={<ResourcesBlogsPage />} />
+        <Route path="/resources/:id" element={<PublicResourceDetailPage />} />
         <Route path="/awards" element={<AwardsPage />} />
         <Route path="/faq" element={<FaqPage />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -61,7 +65,6 @@ const App = () => (
         <Route path="programs" element={<ProgramsPage />} />
         <Route path="programs/:id" element={<ProgramDetailPage />} />
         <Route path="resources" element={<ResourcesPage />} />
-        <Route path="resources/:id" element={<PublicResourceDetailPage />} />
         <Route path="resources/:id" element={<ResourceDetailPage />} />
         <Route path="bookings" element={<BookingsPage />} />
         <Route path="messages" element={<MessagesPage />} />
@@ -72,7 +75,7 @@ const App = () => (
         <Route
           path="admin"
           element={
-            <ProtectedRoute allow={["admin"]}>
+            <ProtectedRoute allow={['admin']}>
               <AdminPage />
             </ProtectedRoute>
           }
